@@ -1,0 +1,27 @@
+---
+title: "TEND_Merging_Data"
+author: "Me"
+date: "`r Sys.Date()`"
+output: html_document
+---
+## R Markdown
+
+#### I want to preface this markdown by reflecting on som
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(root.dir = "C:\\Users\\adcre\\OneDrive\\Desktop\\Desktop_RStudio", echo = TRUE, tidy=TRUE)
+getwd()
+```
+
+# Merging Data!
+
+## This markdown will contain code chunks for various situations in which you would like to merge data sets. Perhaps you would like to merge two data sets, one representing the brain-related data and the other representing the behavioral data for a group of participants. Or, maybe you would like to bind two similar data sets by rows or columns, depending on the composition of the data.
+
+### Our first code chunk will use the 'merge' function. In this example, i will use brain and behavior data from one group of subjects. If you look at my 'Importing Data' Rmd, you will see a lot of the same code! When using the 'merge' function, a function that comes from base R! With that being said, it is important to add arguments to this function to specify the way in which you want the data "merged", so to speak.
+```{r merge base, include=T, echo=T}
+# Notice how I used 'T' instead of 'TRUE'? They serve the same purpose in TRUE/FALSE arguments
+
+
+```
+
+

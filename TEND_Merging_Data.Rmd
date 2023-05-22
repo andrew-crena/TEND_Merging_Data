@@ -2,11 +2,13 @@
 title: "TEND_Merging_Data"
 author: "Me"
 date: "`r Sys.Date()`"
-output: html_document
+output:
+  pdf_document: default
+  html_document: default
 ---
 ## R Markdown
 
-#### I want to preface this markdown by reflecting on som
+#### I want to preface this markdown by reflecting on some of the mistakes I made on my last Rmd on Importing Data. The biggest mistake I made was writing many lines and chunks of code without thinking about the working directory.
 
 ```{r setup, include=FALSE}
 knitr::opts_chunk$set(root.dir = "C:\\Users\\adcre\\OneDrive\\Desktop\\Desktop_RStudio", echo = TRUE, tidy=TRUE)

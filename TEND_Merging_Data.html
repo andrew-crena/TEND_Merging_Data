@@ -11,7 +11,7 @@
 
 <meta name="author" content="Me" />
 
-<meta name="date" content="2023-05-21" />
+<meta name="date" content="2023-05-22" />
 
 <title>TEND_Merging_Data</title>
 
@@ -352,18 +352,64 @@ display: none;
 
 <h1 class="title toc-ignore">TEND_Merging_Data</h1>
 <h4 class="author">Me</h4>
-<h4 class="date">2023-05-21</h4>
+<h4 class="date">2023-05-22</h4>
 
 </div>
 
 
 <div id="r-markdown" class="section level2">
 <h2>R Markdown</h2>
-<div id="i-want-to-preface-this-markdown-by-reflecting-on-some-of-the-mistakes-i-made-on-my-last-rmd-on-importing-data.-the-biggest-mistake-i-made-was-writing-many-lines-and-chunks-of-code-without-thinking-about-the-working-directory." class="section level4">
-<h4>I want to preface this markdown by reflecting on some of the
+<div id="i-want-to-preface-this-markdown-by-first-reflecting-on-some-of-the-mistakes-i-made-on-my-last-rmd-on-importing-data.-the-biggest-mistake-i-made-was-writing-many-lines-and-chunks-of-code-without-thinking-about-the-working-directory-or-the-packages-that-would-later-be-required-later-on-in-the-project.-while-we-may-not-know-the-exact-applicationspackages-we-will-be-using-it-is-a-good-habit-to-load-the-packages-at-the-top-of-your-markdown-or-script" class="section level5">
+<h5>I want to preface this markdown by first reflecting on some of the
 mistakes I made on my last Rmd on Importing Data. The biggest mistake I
 made was writing many lines and chunks of code without thinking about
-the working directory.</h4>
+the working directory, or the packages that would later be required
+later on in the project. While we may not know the exact
+applications/packages we will be using, it is a good habit to load the
+packages at the top of your markdown or script:</h5>
+</div>
+</div>
+<div id="setting-working-directory-for-rmd" class="section level2">
+<h2>Setting Working Directory for Rmd</h2>
+<pre class="r"><code>knitr::opts_chunk$set(root.dir = &quot;C:\\Users\\adcre\\OneDrive\\Desktop\\Desktop_RStudio&quot;, echo = TRUE, tidy=TRUE)
+getwd()</code></pre>
+<pre><code>## [1] &quot;C:/Users/adcre/OneDrive/Desktop/Desktop_RStudio&quot;</code></pre>
+</div>
+<div id="adding-packages." class="section level2">
+<h2>Adding packages.</h2>
+<div id="while-i-am-really-only-interested-in-the-tidytable-application-in-the-tidyverse-package-in-am-adding-these-other-packages-just-to-show-that-this-code-chunk-is-very-important-to-have-at-the-top-of-your-rmd-because-it-will-serve-as-a-reference-for-you-the-program-and-anyone-who-is-reading.-this-offers-a-lot-of-insight-on-your-intentions-when-writing-the-code." class="section level5">
+<h5>While I am really only interested in the ‘tidytable’ application in
+the ‘tidyverse’ package, In am adding these other packages just to show
+that this code chunk is very important to have at the top of your Rmd,
+because it will serve as a reference for you, the program, and anyone
+who is reading. This offers a lot of insight on your intentions when
+writing the code.</h5>
+<pre><code>## ── Attaching core tidyverse packages ──────────────────────── tidyverse 2.0.0 ──
+## ✔ dplyr     1.1.2     ✔ readr     2.1.4
+## ✔ forcats   1.0.0     ✔ stringr   1.5.0
+## ✔ ggplot2   3.4.2     ✔ tibble    3.2.1
+## ✔ lubridate 1.9.2     ✔ tidyr     1.3.0
+## ✔ purrr     1.0.1     
+## ── Conflicts ────────────────────────────────────────── tidyverse_conflicts() ──
+## ✖ dplyr::filter() masks stats::filter()
+## ✖ dplyr::lag()    masks stats::lag()
+## ℹ Use the conflicted package (&lt;http://conflicted.r-lib.org/&gt;) to force all conflicts to become errors
+## 
+## Attaching package: &#39;psych&#39;
+## 
+## 
+## The following objects are masked from &#39;package:ggplot2&#39;:
+## 
+##     %+%, alpha
+## 
+## 
+## 
+## Please cite as: 
+## 
+## 
+##  Hlavac, Marek (2022). stargazer: Well-Formatted Regression and Summary Statistics Tables.
+## 
+##  R package version 5.2.3. https://CRAN.R-project.org/package=stargazer</code></pre>
 </div>
 </div>
 <div id="merging-data" class="section level1">
@@ -375,14 +421,157 @@ two data sets, one representing the brain-related data and the other
 representing the behavioral data for a group of participants. Or, maybe
 you would like to bind two similar data sets by rows or columns,
 depending on the composition of the data.</h2>
-<div id="our-first-code-chunk-will-use-the-merge-function.-in-this-example-i-will-use-brain-and-behavior-data-from-one-group-of-subjects.-if-you-look-at-my-importing-data-rmd-you-will-see-a-lot-of-the-same-code-when-using-the-merge-function-a-function-that-comes-from-base-r-with-that-being-said-it-is-important-to-add-arguments-to-this-function-to-specify-the-way-in-which-you-want-the-data-merged-so-to-speak." class="section level3">
-<h3>Our first code chunk will use the ‘merge’ function. In this example,
+<div id="our-first-code-chunk-will-use-the-merge-function.-in-this-example-i-will-use-brain-and-behavior-data-from-one-group-of-subjects.-if-you-look-at-my-importing-data-rmd-you-will-see-a-lot-of-the-same-code-merge-comes-from-base-r-with-that-being-said-it-is-important-to-add-arguments-to-this-function-to-specify-the-way-in-which-you-want-the-data-merged-so-to-speak." class="section level4">
+<h4>Our first code chunk will use the merge() function. In this example,
 i will use brain and behavior data from one group of subjects. If you
 look at my ‘Importing Data’ Rmd, you will see a lot of the same code!
-When using the ‘merge’ function, a function that comes from base R! With
-that being said, it is important to add arguments to this function to
-specify the way in which you want the data “merged”, so to speak.</h3>
-<pre class="r"><code># Notice how I used &#39;T&#39; instead of &#39;TRUE&#39;? They serve the same purpose in TRUE/FALSE arguments</code></pre>
+merge() comes from base R! With that being said, it is important to add
+arguments to this function to specify the way in which you want the data
+“merged”, so to speak.</h4>
+<pre class="r"><code># Quick reminder: you can use &#39;T&#39; instead of &#39;TRUE&#39; hey serve the same purpose in TRUE/FALSE arguments
+# First, we will load the data in. This should be well understood not only programmatically, but you should have multiple strategies for reading in an Excel file or csv files in general.
+brain_data &lt;- read.csv(&quot;Brain_Data.csv&quot;, header=T, sep=&quot;,&quot;, na.strings=c(&quot;NA&quot;, &quot;888&quot;, &quot;999&quot;))
+bx_data&lt;-read.csv(&quot;Bx_Data.csv&quot;, header=T, sep=&quot;,&quot;, na.strings=c(&quot;NA&quot;, &quot;888&quot;, &quot;999&quot;))
+
+# Now we will merge, but make sure to assign a variable to this new data frame. let&#39;s call it merged_data, and use the view() function to make sure our merge was successful. Or. use str() for a simpler output of your results.merge() expects three arguments, the first being the name of the first df, then the name of the second df, then lastly the variable you would like to merge by. In this case, we will merge by &quot;ID&quot;. This makes sense given we have two data sets with info on the same subjects but they exist in two different frames. Depending on the quality and quantity of arguments you place after the expected three, you can use merge() in many ways. the &quot;all=T&quot; argument is telling the program that even if rows exist for a subject only in one of the frames (or, sheets), it will be kept in the df. You can specify the &quot;all&quot; argument like &#39;all.x=TRUE&#39;, which would keep rows even if they existed only on one df. This is alternative to the default. You can also add the &#39;no.dups=TRUE&#39; argument, which will prevent R from making multiple columns for the same column. If a duplicate column gets made, a suffix will be added, like &quot;x&quot; or &quot;y&quot;.
+merged_data &lt;- merge(brain_data, bx_data, &quot;ID&quot;, all=T, no.dups = )
+view(merged_data)
+str(merged_data)</code></pre>
+<pre><code>## &#39;data.frame&#39;:    55 obs. of  38 variables:
+##  $ ID                              : int  1 2 3 4 5 6 7 8 9 10 ...
+##  $ Group.x                         : chr  &quot;MDD&quot; &quot;MDD&quot; &quot;MDD&quot; &quot;MDD&quot; ...
+##  $ RSFC1                           : num  3.4 5.41 6.99 3.43 3.44 ...
+##  $ RSFC2                           : num  3.04 3.79 3.51 4.02 3.52 ...
+##  $ RSFC3                           : num  4.95 3.39 3.76 3.93 4.07 ...
+##  $ RSFC4                           : num  3.33 3.88 3.11 3.51 4.13 ...
+##  $ RSFC5                           : num  4.15 3.21 3.52 5.32 3.78 ...
+##  $ SubjID                          : chr  &quot;01-T1&quot; &quot;02-T1&quot; &quot;03-T1&quot; &quot;04-T1&quot; ...
+##  $ Group.y                         : chr  &quot;MDD&quot; &quot;MDD&quot; &quot;MDD&quot; &quot;MDD&quot; ...
+##  $ Gender                          : int  2 1 2 1 2 2 2 2 3 1 ...
+##  $ Sex                             : int  2 1 2 1 2 2 2 2 2 1 ...
+##  $ Ethnicity                       : int  2 2 1 2 1 2 2 2 1 2 ...
+##  $ Race                            : int  5 6 7 5 6 2 5 2 1 5 ...
+##  $ Puberty                         : num  3.5 4 3.5 4.5 4 4 5 4.5 4.5 5 ...
+##  $ Age_at_Bx                       : num  15.2 13.6 15.7 15.1 14.3 ...
+##  $ Age_at_Scan                     : num  15.2 13.7 15.8 15.1 14.3 ...
+##  $ Height                          : num  63.5 67.5 59.1 70.5 64 62.1 62 67 63.8 66.9 ...
+##  $ Weight                          : num  167 107.6 91.4 125.4 179 ...
+##  $ Bx_to_Scan_Days                 : int  12 8 29 7 7 5 11 7 14 13 ...
+##  $ CDRSR_total                     : int  53 33 50 42 65 49 49 81 70 61 ...
+##  $ CDRSR_tscore                    : num  70 58 68 64 80.5 67.5 67.5 86 83 77 ...
+##  $ Current_Med                     : int  0 0 0 1 1 1 1 0 1 1 ...
+##  $ Recurrent_Past_Month            : int  1 3 1 3 3 3 3 3 3 1 ...
+##  $ Recurrent_Current_Duration_Weeks: int  NA 2 NA 156 364 156 312 8 676 NA ...
+##  $ Age_First_SI                    : int  NA 12 13 13 10 12 14 13 8 NA ...
+##  $ SI_Group                        : int  0 1 1 1 1 1 1 1 1 0 ...
+##  $ SI_Past_Month                   : int  1 3 2 1 3 2 1 3 3 1 ...
+##  $ Hx.Attempt                      : int  0 1 1 0 1 0 0 0 1 0 ...
+##  $ Age.First.Attempt               : int  NA 13 15 NA 10 NA NA NA 10 NA ...
+##  $ Number.of.Attempts              : int  0 2 1 0 3 0 0 0 5 0 ...
+##  $ RADS_DM                         : int  26 26 25 25 27 30 27 32 32 30 ...
+##  $ RADS_AN                         : int  11 19 13 18 10 19 13 25 16 16 ...
+##  $ RADS_NS                         : int  16 32 21 25 29 25 21 29 29 19 ...
+##  $ RADS_SC                         : int  21 22 18 18 28 23 17 26 26 22 ...
+##  $ RADS_total                      : int  74 99 77 86 94 97 78 112 103 87 ...
+##  $ PHQ9                            : int  19 14 18 16 19 21 16 23 23 21 ...
+##  $ PHQ9_q9                         : int  1 3 0 1 3 2 1 2 2 2 ...
+##  $ SIQ                             : int  10 50 17 42 34 75 34 74 52 11 ...</code></pre>
+</div>
+<div id="now-that-we-have-explored-a-little-bit-with-merge-lets-use-rbind-and-cbind-which-allow-you-to-merge-data-frames-by-row-or-by-column.-we-will-start-with-rbind" class="section level3">
+<h3>Now that we have explored a little bit with merge(), let’s use
+rbind() and cbind(), which allow you to merge data frames by row or by
+column. We will start with rbind()</h3>
+<pre class="r"><code># rbind() and cbind() are both part of base language, but have a lot of advantages in specific situations when compared to merge(). Johanna did a wonderful job explaining the reasoning behind these functions and the different scenarios that would require each function. I will try my best to regurgitate her explanation as a way of learning.
+# rbind() would be useful in a scenario where you know you will not have any matching rows, so the df&#39;s will just be combined vertically, if that makes sense. For example, let&#39;s say we have two data sets, each containing the same variables or columns, but they are completely separate groups of subjects. Maybe two universities are combining their data, or you want to combine your project with a df found online, knowing that the columns, or things being measured (like &quot;Depression Score&quot;), are exactly the same. Now, those two sets of subjects will be stacked vertically on top of each other, for lack of a better term. We will create our own data sets with set.seed() and other functions to visualize and practice rbind(). This is explained in my &quot;Creating_Example_DataSets.Rmd&quot; repo.
+
+# Generate example dataset 1
+set.seed(1)
+data_1 &lt;- data.frame(
+  ID = 1:5,
+  Value = rnorm(5)
+)
+
+# Generate example dataset 2
+set.seed(2)
+data_2 &lt;- data.frame(
+  ID = 6:10,
+  Value = rnorm(5)
+)
+
+# Save the datasets as CSV files
+write.csv(data_1, &quot;data_1.csv&quot;, row.names = FALSE)
+write.csv(data_2, &quot;data_2.csv&quot;, row.names = FALSE)
+
+# Now, we we will use rbind()
+
+# Read the datasets from CSV files
+data_1 &lt;- read.csv(&quot;data_1.csv&quot;)
+data_2 &lt;- read.csv(&quot;data_2.csv&quot;)
+
+# Combine the datasets using rbind()
+rbind_data &lt;- rbind(data_1, data_2)
+
+# View the combined dataset
+# View(rbind_data)
+str(rbind_data)</code></pre>
+<pre><code>## &#39;data.frame&#39;:    10 obs. of  2 variables:
+##  $ ID   : int  1 2 3 4 5 6 7 8 9 10
+##  $ Value: num  -0.626 0.184 -0.836 1.595 0.33 ...</code></pre>
+</div>
+<div id="lets-use-more-complex-functions-this-code-chunk-in-particular-will-be-using-the-tidyverse-package-which-contains-the-tidytable-application.-within-this-application-is-functions-like-left_join-and-many-other-functions-that-allow-you-to-merge-in-more-complex-ways-than-the-base-language-counterparts." class="section level3">
+<h3>Let’s use more complex functions! This code chunk in particular will
+be using the ‘tidyverse’ package, which contains the ‘tidytable’
+application. Within this application is functions like left_join, and
+many other functions that allow you to merge in more complex ways than
+the base language counterparts.</h3>
+</div>
+<div id="during-session-reflection" class="section level3">
+<h3>DURING-Session REFLECTION</h3>
+<div id="i-want-to-keep-a-record-of-any-significant-mistakes-or-general-concepts-i-was-caught-up-with-during-the-making-of-the-document-so-this-section-will-serve-as-a-journal-so-to-speak.the-same-will-be-done-for-the-post-session-reflection.-since-this-is-a-new-habit-i-want-to-gain-it-will-be-very-stream-of-consciousness-and-possibly-disorganized.-but-the-purpose-is-to-retroactively-understand-my-thought-process-when-looking-back-over-my-rmds.reflections-or-general-comments-will-be-made-with-5-pound-signs-as-of-may-23-2023." class="section level4">
+<h4>I want to keep a record of any significant mistakes or general
+concepts I was caught up with during the making of the document, so this
+section will serve as a journal, so to speak.The same will be done for
+the Post-Session REFLECTION. Since this is a new habit I want to gain,
+it will be very stream of consciousness and possibly disorganized. But
+the purpose is to retroactively understand my thought process when
+looking back over my Rmd’s.Reflections or general comments will be made
+with 5 pound signs, as of may 23 2023.</h4>
+<div id="when-making-comments-within-my-code-chunks-i-will-stop-using-the-quotes-to-refer-to-functions-but-rather-i-will-simply-write-the-function-and-put-parentheses-after-to-show-that-it-is-a-function.-for-example-i-wanted-to-use-str-instead-of-view-because-x-y-and-z." class="section level5">
+<h5>When making comments within my code chunks, i will stop using the
+‘quotes’ to refer to functions, but rather i will simply write the
+function and put parentheses() after, to show that it is a function. For
+example, “I wanted to use str() instead of View() because x, y, and
+z”.</h5>
+</div>
+<div id="johanna-mentioned-a-really-useful-quick-tip-and-that-is-using-commandenter-when-hovering-your-mouse-over-a-specific-line-of-code.-this-will-run-just-that-line-and-not-the-whole-code-chunk.-this-method-is-an-alternative-to-highlighting-the-line-and-pressing-run-selected-lines-which-is-an-option-given-when-pressing-the-run-button." class="section level5">
+<h5>Johanna mentioned a really useful quick tip, and that is using
+command+Enter when hovering your mouse over a specific line of code.
+This will run just that line, and not the whole code chunk. This method
+is an alternative to highlighting the line and pressing ‘Run Selected
+Line(s)’, which is an option given when pressing the ‘Run’ button.</h5>
+</div>
+<div id="when-making-rmd-files-i-wasnt-paying-enough-attention-to-the-font-size-i-was-using-on-specific-comments.-i-am-becoming-more-aware-of-how-the-size-of-your-font-expresses-significance-to-a-certain-extent." class="section level5">
+<h5>When making Rmd files, i wasn’t paying enough attention to the font
+size i was using on specific comments. I am becoming more aware of how
+the size of your font expresses significance to a certain extent.</h5>
+</div>
+<div id="this-became-much-more-obvious-when-i-used-the-visual-tool-in-the-top-left-quadrant-of-rstudio.-this-tool-is-very-helpful-for-me-because-it-lets-me-quickly-visualize-my-code-before-i-spend-too-much-time-writing-something-that-is-unnecessary-incorrect-or-anything-that-could-be-aesthetically-wrong." class="section level5">
+<h5>This became much more obvious when I used the ‘Visual’ tool in the
+top left quadrant of RStudio. This tool is very helpful for me because
+it lets me quickly visualize my code before I spend too much time
+writing something that is unnecessary, incorrect, or anything that could
+be aesthetically wrong.</h5>
+</div>
+<div id="section" class="section level5">
+<h5></h5>
+</div>
+</div>
+</div>
+<div id="post-session-reflection" class="section level3">
+<h3>POST-Session REFLECTION</h3>
+<div id="tbd.." class="section level5">
+<h5>TBD….. :)</h5>
+</div>
 </div>
 </div>
 </div>

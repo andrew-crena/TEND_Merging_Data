@@ -6,24 +6,113 @@ output:
   pdf_document: default
   html_document: default
 ---
+
 ## R Markdown
 
-#### I want to preface this markdown by reflecting on some of the mistakes I made on my last Rmd on Importing Data. The biggest mistake I made was writing many lines and chunks of code without thinking about the working directory.
+##### I want to preface this markdown by first reflecting on some of the mistakes I made on my last Rmd on Importing Data. The biggest mistake I made was writing many lines and chunks of code without thinking about the working directory, or the packages that would later be required later on in the project. While we may not know the exact applications/packages we will be using, it is a good habit to load the packages at the top of your markdown or script:
 
-```{r setup, include=FALSE}
+## Setting Working Directory for Rmd
+
+```{r setup, include=TRUE, echo=TRUE}
 knitr::opts_chunk$set(root.dir = "C:\\Users\\adcre\\OneDrive\\Desktop\\Desktop_RStudio", echo = TRUE, tidy=TRUE)
 getwd()
+```
+
+## Adding packages.
+
+##### While I am really only interested in the 'tidytable' application in the 'tidyverse' package, In am adding these other packages just to show that this code chunk is very important to have at the top of your Rmd, because it will serve as a reference for you, the program, and anyone who is reading. This offers a lot of insight on your intentions when writing the code.
+
+```{r prep, include=T, echo=F}
+library(tidyverse) 
+# Loads 'ggplot2' for data visualization. 'dplyr' for data manipulation, 'tidyr' for data tidying, 'readr' for data import, 'purrr' for functional programming, 'tibble' for (tibbles) a modern re-imagining of data frames, 'stringr' for strings,and 'forcats' for factors
+library(foreign) 
+# Read data stored by SPSS and Stata
+library(psych) 
+# For personality, psychometric, and psychological research, cinldues describe function and error bars
+library(stargazer) 
+# Handy regression tables
+library(rstudioapi) # Used for misc R studio function (e.g. get active document content)
 ```
 
 # Merging Data!
 
 ## This markdown will contain code chunks for various situations in which you would like to merge data sets. Perhaps you would like to merge two data sets, one representing the brain-related data and the other representing the behavioral data for a group of participants. Or, maybe you would like to bind two similar data sets by rows or columns, depending on the composition of the data.
 
-### Our first code chunk will use the 'merge' function. In this example, i will use brain and behavior data from one group of subjects. If you look at my 'Importing Data' Rmd, you will see a lot of the same code! When using the 'merge' function, a function that comes from base R! With that being said, it is important to add arguments to this function to specify the way in which you want the data "merged", so to speak.
-```{r merge base, include=T, echo=T}
-# Notice how I used 'T' instead of 'TRUE'? They serve the same purpose in TRUE/FALSE arguments
+#### Our first code chunk will use the merge() function. In this example, i will use brain and behavior data from one group of subjects. If you look at my 'Importing Data' Rmd, you will see a lot of the same code! merge() comes from base R! With that being said, it is important to add arguments to this function to specify the way in which you want the data "merged", so to speak.
+
+```{r read in then merge, include=T, echo=T}
+# Quick reminder: you can use 'T' instead of 'TRUE' hey serve the same purpose in TRUE/FALSE arguments
+# First, we will load the data in. This should be well understood not only programmatically, but you should have multiple strategies for reading in an Excel file or csv files in general.
+brain_data <- read.csv("Brain_Data.csv", header=T, sep=",", na.strings=c("NA", "888", "999"))
+bx_data<-read.csv("Bx_Data.csv", header=T, sep=",", na.strings=c("NA", "888", "999"))
+
+# Now we will merge, but make sure to assign a variable to this new data frame. let's call it merged_data, and use the view() function to make sure our merge was successful. Or. use str() for a simpler output of your results.merge() expects three arguments, the first being the name of the first df, then the name of the second df, then lastly the variable you would like to merge by. In this case, we will merge by "ID". This makes sense given we have two data sets with info on the same subjects but they exist in two different frames. Depending on the quality and quantity of arguments you place after the expected three, you can use merge() in many ways. the "all=T" argument is telling the program that even if rows exist for a subject only in one of the frames (or, sheets), it will be kept in the df. You can specify the "all" argument like 'all.x=TRUE', which would keep rows even if they existed only on one df. This is alternative to the default. You can also add the 'no.dups=TRUE' argument, which will prevent R from making multiple columns for the same column. If a duplicate column gets made, a suffix will be added, like "x" or "y".
+merged_data <- merge(brain_data, bx_data, "ID", all=T, no.dups = )
+view(merged_data)
+str(merged_data)
+```
+
+### Now that we have explored a little bit with merge(), let's use rbind() and cbind(), which allow you to merge data frames by row or by column. We will start with rbind()
+
+```{r rbind and cbind, echo=TRUE, include=TRUE}
+# rbind() and cbind() are both part of base language, but have a lot of advantages in specific situations when compared to merge(). Johanna did a wonderful job explaining the reasoning behind these functions and the different scenarios that would require each function. I will try my best to regurgitate her explanation as a way of learning.
+# rbind() would be useful in a scenario where you know you will not have any matching rows, so the df's will just be combined vertically, if that makes sense. For example, let's say we have two data sets, each containing the same variables or columns, but they are completely separate groups of subjects. Maybe two universities are combining their data, or you want to combine your project with a df found online, knowing that the columns, or things being measured (like "Depression Score"), are exactly the same. Now, those two sets of subjects will be stacked vertically on top of each other, for lack of a better term. We will create our own data sets with set.seed() and other functions to visualize and practice rbind(). This is explained in my "Creating_Example_DataSets.Rmd" repo.
+
+# Generate example dataset 1
+set.seed(1)
+data_1 <- data.frame(
+  ID = 1:5,
+  Value = rnorm(5)
+)
+
+# Generate example dataset 2
+set.seed(2)
+data_2 <- data.frame(
+  ID = 6:10,
+  Value = rnorm(5)
+)
+
+# Save the datasets as CSV files
+write.csv(data_1, "data_1.csv", row.names = FALSE)
+write.csv(data_2, "data_2.csv", row.names = FALSE)
+
+# Now, we we will use rbind()
+
+# Read the datasets from CSV files
+data_1 <- read.csv("data_1.csv")
+data_2 <- read.csv("data_2.csv")
+
+# Combine the datasets using rbind()
+rbind_data <- rbind(data_1, data_2)
+
+# View the combined dataset
+# View(rbind_data)
+str(rbind_data)
+
 
 
 ```
 
+### Let's use more complex functions! This code chunk in particular will be using the 'tidyverse' package, which contains the 'tidytable' application. Within this application is functions like left_join, and many other functions that allow you to merge in more complex ways than the base language counterparts.
 
+```{r tidytable, include=TRUE, echo=TRUE}
+
+```
+
+### DURING-Session REFLECTION
+
+#### I want to keep a record of any significant mistakes or general concepts I was caught up with during the making of the document, so this section will serve as a journal, so to speak.The same will be done for the Post-Session REFLECTION. Since this is a new habit I want to gain, it will be very stream of consciousness and possibly disorganized. But the purpose is to retroactively understand my thought process when looking back over my Rmd's.Reflections or general comments will be made with 5 pound signs, as of may 23 2023.
+
+##### When making comments within my code chunks, i will stop using the 'quotes' to refer to functions, but rather i will simply write the function and put parentheses() after, to show that it is a function. For example, "I wanted to use str() instead of View() because x, y, and z".
+
+##### Johanna mentioned a really useful quick tip, and that is using command+Enter when hovering your mouse over a specific line of code. This will run just that line, and not the whole code chunk. This method is an alternative to highlighting the line and pressing 'Run Selected Line(s)', which is an option given when pressing the 'Run' button.
+
+##### When making Rmd files, i wasn't paying enough attention to the font size i was using on specific comments. I am becoming more aware of how the size of your font expresses significance to a certain extent.
+
+##### This became much more obvious when I used the 'Visual' tool in the top left quadrant of RStudio. This tool is very helpful for me because it lets me quickly visualize my code before I spend too much time writing something that is unnecessary, incorrect, or anything that could be aesthetically wrong.
+
+##### 
+
+### POST-Session REFLECTION
+
+##### TBD..... :)

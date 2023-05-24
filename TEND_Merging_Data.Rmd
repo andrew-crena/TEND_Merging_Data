@@ -14,7 +14,7 @@ output:
 ## Setting Working Directory for Rmd
 
 ```{r setup, include=TRUE, echo=TRUE}
-knitr::opts_chunk$set(root.dir = "C:\\Users\\adcre\\OneDrive\\Desktop\\Desktop_RStudio", echo = TRUE, tidy=TRUE)
+knitr::opts_chunk$set(root.dir = "C:\\Users\\adcre\\OneDrive\\Desktop\\Desktop_RStudio", echo = TRUE)
 getwd()
 ```
 
@@ -86,17 +86,63 @@ data_2 <- read.csv("data_2.csv")
 rbind_data <- rbind(data_1, data_2)
 
 # View the combined dataset
-# View(rbind_data)
 str(rbind_data)
-
-
-
 ```
 
-### Let's use more complex functions! This code chunk in particular will be using the 'tidyverse' package, which contains the 'tidytable' application. Within this application is functions like left_join, and many other functions that allow you to merge in more complex ways than the base language counterparts.
+### Let's use more complex functions! This code chunk in particular will be using the 'dplyr' package, which contains the 'dplyr' application. Within this application is functions like left_join, and many other functions that allow you to merge in more complex ways than the base language counterparts.
+# Before using 'mutating joins' in functions with regard to dplyr, which are a set of functions including full_join, half_join, left_join, and right_join. I will now introduce the '%>%' and the '::' operators.
 
-```{r tidytable, include=TRUE, echo=TRUE}
+```{r useful operators, include=TRUE, echo=TRUE}
+# '%>%' operates like a pipe, allowing you to make more readable, efficient, and concise code for dplyr. Ex
+# Example data frame
+data <- data.frame(
+  id = c(1, 2, 3, 4, 5),
+  name = c("Alice", "Bob", "Charlie", "David", "Eve"),
+  age = c(25, 32, 40, 28, 35),
+  city = c("San Diego", "Los Angeles", "Sacremento", "San Francisco", "Chico"),
+  stringsAsFactors = FALSE
+)
 
+# Task: Filter and summarize data using traditional approach, and some useful operators in the last example 'summary_data'. we use the mutate function to create a new column age_group based on a condition. The ifelse statement assigns the value "30 and above" if the age is greater than or equal to 30, and "Below 30" otherwise.
+filtered_data <- filter(data, age >= 30)
+selected_data <- select(filtered_data, id, name, city)
+summary_data <- data %>%
+  mutate(age_group = ifelse(age >= 30, "30 and above", "Below 30")) %>%
+  summarize(avg_age = mean(age))
+
+# Check results
+str(summary_data)
+```
+
+```{r mutating joins plus operators, include=TRUE, echo=TRUE}
+# '::' is used to access functions or objects from specific packages or namespaces. Ex using dplyr
+
+# Create data frame 1
+data1 <- data.frame(
+  id = c(1, 2, 3, 4),
+  value1 = c(10, 20, 30, 40)
+)
+
+# Create data frame 2
+data2 <- data.frame(
+  id = c(2, 3, 4, 5),
+  value2 = c(100, 200, 300, 400)
+)
+
+# inner_join returns only the rows with matching "id" values from both data frames. Not suggested because you could lose data!
+inner_result <- dplyr::inner_join(data1, data2, by = "id")
+
+# left_join returns all rows from the left data frame and the matching rows from the right data frame.
+left_result <- dplyr::left_join(data1, data2, by = "id")
+
+# right_join returns all rows from the right data frame and the matching rows from the left data frame.
+right_result <- dplyr::right_join(data1, data2, by = "id")
+
+# full_join returns all rows from both data frames, combining them based on the "id" column.
+full_result <- dplyr::full_join(data1, data2, by = "id")
+
+# You should feel comfortable with viewing your results!
+str(left_result)
 ```
 
 ### DURING-Session REFLECTION
@@ -111,7 +157,7 @@ str(rbind_data)
 
 ##### This became much more obvious when I used the 'Visual' tool in the top left quadrant of RStudio. This tool is very helpful for me because it lets me quickly visualize my code before I spend too much time writing something that is unnecessary, incorrect, or anything that could be aesthetically wrong.
 
-##### 
+##### GPT was incredibly helpful for understanding concepts and putting a magnifying glass on specific parts of the code that required my attention.
 
 ### POST-Session REFLECTION
 

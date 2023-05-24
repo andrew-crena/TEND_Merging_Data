@@ -11,7 +11,7 @@
 
 <meta name="author" content="Me" />
 
-<meta name="date" content="2023-05-22" />
+<meta name="date" content="2023-05-24" />
 
 <title>TEND_Merging_Data</title>
 
@@ -352,7 +352,7 @@ display: none;
 
 <h1 class="title toc-ignore">TEND_Merging_Data</h1>
 <h4 class="author">Me</h4>
-<h4 class="date">2023-05-22</h4>
+<h4 class="date">2023-05-24</h4>
 
 </div>
 
@@ -371,7 +371,7 @@ packages at the top of your markdown or script:</h5>
 </div>
 <div id="setting-working-directory-for-rmd" class="section level2">
 <h2>Setting Working Directory for Rmd</h2>
-<pre class="r"><code>knitr::opts_chunk$set(root.dir = &quot;C:\\Users\\adcre\\OneDrive\\Desktop\\Desktop_RStudio&quot;, echo = TRUE, tidy=TRUE)
+<pre class="r"><code>knitr::opts_chunk$set(root.dir = &quot;C:\\Users\\adcre\\OneDrive\\Desktop\\Desktop_RStudio&quot;, echo = TRUE)
 getwd()</code></pre>
 <pre><code>## [1] &quot;C:/Users/adcre/OneDrive/Desktop/Desktop_RStudio&quot;</code></pre>
 </div>
@@ -512,19 +512,78 @@ data_2 &lt;- read.csv(&quot;data_2.csv&quot;)
 rbind_data &lt;- rbind(data_1, data_2)
 
 # View the combined dataset
-# View(rbind_data)
 str(rbind_data)</code></pre>
 <pre><code>## &#39;data.frame&#39;:    10 obs. of  2 variables:
 ##  $ ID   : int  1 2 3 4 5 6 7 8 9 10
 ##  $ Value: num  -0.626 0.184 -0.836 1.595 0.33 ...</code></pre>
 </div>
-<div id="lets-use-more-complex-functions-this-code-chunk-in-particular-will-be-using-the-tidyverse-package-which-contains-the-tidytable-application.-within-this-application-is-functions-like-left_join-and-many-other-functions-that-allow-you-to-merge-in-more-complex-ways-than-the-base-language-counterparts." class="section level3">
+<div id="lets-use-more-complex-functions-this-code-chunk-in-particular-will-be-using-the-dplyr-package-which-contains-the-dplyr-application.-within-this-application-is-functions-like-left_join-and-many-other-functions-that-allow-you-to-merge-in-more-complex-ways-than-the-base-language-counterparts." class="section level3">
 <h3>Let’s use more complex functions! This code chunk in particular will
-be using the ‘tidyverse’ package, which contains the ‘tidytable’
-application. Within this application is functions like left_join, and
-many other functions that allow you to merge in more complex ways than
-the base language counterparts.</h3>
+be using the ‘dplyr’ package, which contains the ‘dplyr’ application.
+Within this application is functions like left_join, and many other
+functions that allow you to merge in more complex ways than the base
+language counterparts.</h3>
 </div>
+</div>
+</div>
+<div id="before-using-mutating-joins-in-functions-with-regard-to-dplyr-which-are-a-set-of-functions-including-full_join-half_join-left_join-and-right_join.-i-will-now-introduce-the-and-the-operators." class="section level1">
+<h1>Before using ‘mutating joins’ in functions with regard to dplyr,
+which are a set of functions including full_join, half_join, left_join,
+and right_join. I will now introduce the ‘%&gt;%’ and the ‘::’
+operators.</h1>
+<pre class="r"><code># &#39;%&gt;%&#39; operates like a pipe, allowing you to make more readable, efficient, and concise code for dplyr. Ex
+# Example data frame
+data &lt;- data.frame(
+  id = c(1, 2, 3, 4, 5),
+  name = c(&quot;Alice&quot;, &quot;Bob&quot;, &quot;Charlie&quot;, &quot;David&quot;, &quot;Eve&quot;),
+  age = c(25, 32, 40, 28, 35),
+  city = c(&quot;San Diego&quot;, &quot;Los Angeles&quot;, &quot;Sacremento&quot;, &quot;San Francisco&quot;, &quot;Chico&quot;),
+  stringsAsFactors = FALSE
+)
+
+# Task: Filter and summarize data using traditional approach, and some useful operators in the last example &#39;summary_data&#39;. we use the mutate function to create a new column age_group based on a condition. The ifelse statement assigns the value &quot;30 and above&quot; if the age is greater than or equal to 30, and &quot;Below 30&quot; otherwise.
+filtered_data &lt;- filter(data, age &gt;= 30)
+selected_data &lt;- select(filtered_data, id, name, city)
+summary_data &lt;- data %&gt;%
+  mutate(age_group = ifelse(age &gt;= 30, &quot;30 and above&quot;, &quot;Below 30&quot;)) %&gt;%
+  summarize(avg_age = mean(age))
+
+# Check results
+str(summary_data)</code></pre>
+<pre><code>## &#39;data.frame&#39;:    1 obs. of  1 variable:
+##  $ avg_age: num 32</code></pre>
+<pre class="r"><code># &#39;::&#39; is used to access functions or objects from specific packages or namespaces. Ex using dplyr
+
+# Create data frame 1
+data1 &lt;- data.frame(
+  id = c(1, 2, 3, 4),
+  value1 = c(10, 20, 30, 40)
+)
+
+# Create data frame 2
+data2 &lt;- data.frame(
+  id = c(2, 3, 4, 5),
+  value2 = c(100, 200, 300, 400)
+)
+
+# inner_join returns only the rows with matching &quot;id&quot; values from both data frames. Not suggested because you could lose data!
+inner_result &lt;- dplyr::inner_join(data1, data2, by = &quot;id&quot;)
+
+# left_join returns all rows from the left data frame and the matching rows from the right data frame.
+left_result &lt;- dplyr::left_join(data1, data2, by = &quot;id&quot;)
+
+# right_join returns all rows from the right data frame and the matching rows from the left data frame.
+right_result &lt;- dplyr::right_join(data1, data2, by = &quot;id&quot;)
+
+# full_join returns all rows from both data frames, combining them based on the &quot;id&quot; column.
+full_result &lt;- dplyr::full_join(data1, data2, by = &quot;id&quot;)
+
+# You should feel comfortable with viewing your results!
+str(left_result)</code></pre>
+<pre><code>## &#39;data.frame&#39;:    4 obs. of  3 variables:
+##  $ id    : num  1 2 3 4
+##  $ value1: num  10 20 30 40
+##  $ value2: num  NA 100 200 300</code></pre>
 <div id="during-session-reflection" class="section level3">
 <h3>DURING-Session REFLECTION</h3>
 <div id="i-want-to-keep-a-record-of-any-significant-mistakes-or-general-concepts-i-was-caught-up-with-during-the-making-of-the-document-so-this-section-will-serve-as-a-journal-so-to-speak.the-same-will-be-done-for-the-post-session-reflection.-since-this-is-a-new-habit-i-want-to-gain-it-will-be-very-stream-of-consciousness-and-possibly-disorganized.-but-the-purpose-is-to-retroactively-understand-my-thought-process-when-looking-back-over-my-rmds.reflections-or-general-comments-will-be-made-with-5-pound-signs-as-of-may-23-2023." class="section level4">
@@ -562,8 +621,10 @@ it lets me quickly visualize my code before I spend too much time
 writing something that is unnecessary, incorrect, or anything that could
 be aesthetically wrong.</h5>
 </div>
-<div id="section" class="section level5">
-<h5></h5>
+<div id="gpt-was-incredibly-helpful-for-understanding-concepts-and-putting-a-magnifying-glass-on-specific-parts-of-the-code-that-required-my-attention." class="section level5">
+<h5>GPT was incredibly helpful for understanding concepts and putting a
+magnifying glass on specific parts of the code that required my
+attention.</h5>
 </div>
 </div>
 </div>
@@ -571,7 +632,6 @@ be aesthetically wrong.</h5>
 <h3>POST-Session REFLECTION</h3>
 <div id="tbd.." class="section level5">
 <h5>TBD….. :)</h5>
-</div>
 </div>
 </div>
 </div>
